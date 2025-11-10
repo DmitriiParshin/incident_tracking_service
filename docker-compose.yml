@@ -1,0 +1,18 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite:///./data/incidents.db
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+
+  tests:
+    build: .
+    command: ["pytest", "-v", "--cov=app", "--cov-report=term-missing"]
+    environment:
+      DATABASE_URL: "sqlite:///:memory:"
+    volumes:
+      - .:/app
